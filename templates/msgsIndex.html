@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Messages {% endblock %}</h1>
+    {% for message in messages %}
+        <div class='message'>
+            <h3> ID: {{ message['id'] }}</h3>
+            <p> Name: {{ message['name'] }}</p>
+            <p> Rut: {{ message['rut'] }}</p>
+            <p> Heart rate: {{ message['hr'] }}</p>
+            <p> Oxygen Saturation: {{ message['spo2'] }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+

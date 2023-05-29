@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
     <meta charset="UTF-8">
     <title>{% block title %} {% endblock %} - FlaskApp</title>
     <style>
@@ -11,7 +13,7 @@
         }
         nav a {
             color: #d64161;
-            font-size: 3em;
+            font-size: 2em;
             margin-left: 50px;
             text-decoration: none;
         }
@@ -27,10 +29,11 @@
 </head>
 <body>
     <nav>
-        <a href="{{ url_for('index') }}">FlaskApp</a>
-        <a href="{{ url_for('create') }}">Send Data</a>
-        <a href="{{ url_for('about') }}">About</a>
-        <a href="{{ url_for('viewData') }}">Sent messages</a>
+        <a href="{{ url_for('main.index') }}">FlaskApp</a>
+        <a href="{{ url_for('main.create_HRSpO2') }}">Send HR & SpO2 Data</a>
+        <a href="{{ url_for('main.create_EWS') }}">Send EWS Data</a>
+        <a href="{{ url_for('main.viewData') }}">Sent messages</a>
+        <a href="{{ url_for('main.about') }}">About</a>
     </nav>
     <hr>
     <div class="content">

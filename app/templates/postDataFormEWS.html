@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>{% block title %} Add a entry for EWS protocol {% endblock %}</h1>
+    <button id="getDataButton">Get Max30102 Data</button>
+    <form method="post">
+        <label for="name">Name</label>
+        <br>
+        <textarea id = "NameTextArea"
+                  name="name"
+                  placeholder="Juan Perez"
+                  rows="1"
+                  cols="30"
+                  >{{ request.form['name'] }}</textarea>
+        <br>
+        <label for="rut">Rut</label>
+        <br>
+        <textarea id = "RutTextArea"
+                  name="rut"
+                  placeholder="12345678-9"
+                  rows="1"
+                  cols="30"
+                  >{{ request.form['rut'] }}</textarea>
+        <br>
+        <label for="hr">Heart Rate</label>
+        <br>
+        <textarea id = "HRTextArea"
+                  name="hr"
+                  placeholder="60"
+                  rows="1"
+                  cols="30"
+                  >{{ request.form['hr'] }}</textarea>
+        <br>
+        <label for="spo2">Oxygen Saturation</label>
+        <br>
+        <textarea id = "SpO2TextArea"
+                  name="spo2"
+                  placeholder="98"
+                  rows="1"
+                  cols="30"
+                  >{{ request.form['spo2'] }}</textarea>
+        <br>
+        <label for="t">Temperature</label>
+        <br>
+        <textarea id = "TemperatureTextArea"
+                  name="t"
+                  placeholder="36"
+                  rows="1"
+                  cols="30"
+                  >{{ request.form['t'] }}</textarea>
+        <br>
+        <label for="sbp">Systolic Blood Pressure</label>
+        <br>
+        <textarea id = "SBPTextArea"
+                  name="sbp"
+                  placeholder="144"
+                  rows="1"
+                  cols="30"
+                  >{{ request.form['sbp'] }}</textarea>
+        <br>
+        <label for="rr">Respiration Rate</label>
+        <br>
+        <textarea id = "RespirationRateTextArea"
+                  name="rr"
+                  placeholder="98"
+                  rows="1"
+                  cols="30"
+                  >{{ request.form['rr'] }}</textarea>
+        <br>
+        <label for="so">Use of Suplemental Oxygen?</label>
+        <br>
+        <input id = "SuplementalOxygenTextArea" name="so" type="checkbox"></input>>
+        <br>
+        <label for="rr">Level of Consciousness</label>
+        <br>
+        <select id = "LevelOfConsciousnessSelect" name="loc" placeholder="A">
+          <option value="A">Alert</option>
+          <option value="C">Confused</option>
+          <option value="V">Responsive to voice</option>
+          <option value="P">Responsive to pain</option>
+          <option value="U">Unresponsive</option>
+        </select>
+        <br>
+        <button type="submit">Submit</button>
+      </form>
+    <script type="text/javascript" charset="utf-8">
+        const socket = io({autoConnect: false})
+        document.getElementById("getDataButton").addEventListener("click", function() {
+          //let username = document.getElementById("username").value;
+          //let rut = document.getElementById("rut").value;
+          //document.getElementById("NameTextArea").value = username;
+          //document.getElementById("RutTextArea").value = rut;
+    
+          socket.connect();
+    
+          socket.on("connect", function() {
+            socket.emit("get_esp32_data");
+            console.log("User waiting for data to display")
+          })
+          // listen for mqtt_message events
+          // when a new message is received, log and append the data to the page
+          socket.on('mqtt_message', function(data) {
+            console.log("hola chao");
+            console.log(data);
+            if (data["topic"] == "/Max30102FromESP32") {
+              var text = data['payload'];
+              var text = text.split(";")
+              console.log(data["payload"])
+              var hr_text = text[0].split("=")[1]
+              var spo2_text = text[1].split("=")[1]
+              console.log(hr_text, spo2_text)
+              //var hr = document.getElementById("hr_msg")
+              //hr.innerHTML = hr_text
+              //var spo2 = document.getElementById("spo2_msg")
+              //spo2.innerHTML = spo2_text
+              document.getElementById("HRTextArea").value = hr_text;
+              document.getElementById("SpO2TextArea").value = spo2_text;
+            }
+          })
+        })
+      </script>
+{% endblock %}

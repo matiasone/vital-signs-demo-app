@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Messages {% endblock %}</h1>
+    {% for message in messages %}
+        {% if message["type"] == "HR&SPO2" %}
+            <div class='message_hrspo2'>
+                <h3> ID: {{ message['id'] }}</h3>
+                <p> Type: {{ message['type'] }}</p>
+                <p> Name: {{ message['name'] }}</p>
+                <p> Rut: {{ message['rut'] }}</p>
+                <p> Heart rate: {{ message['hr'] }}</p>
+                <p> Oxygen Saturation: {{ message['spo2'] }}</p>
+            </div>
+        {% endif %}
+        {% if message["type"] == "EWS" %}
+            <div class='message_ews'>
+                <h3> ID: {{ message['id'] }}</h3>
+                <p> Type: {{ message['type'] }}</p>
+                <p> Name: {{ message['name'] }}</p>
+                <p> Rut: {{ message['rut'] }}</p>
+                <p> Heart rate: {{ message['hr'] }}</p>
+                <p> Oxygen Saturation: {{ message['spo2'] }}</p>
+                <p> Temperature: {{ message['t'] }}</p>
+                <p> Systolic Blood Pressure: {{ message['sbp'] }}</p>
+                <p> Respiration Rate: {{ message['rr'] }}</p>
+                <p> Suplemental Oxygen: {{ message['so'] }}</p>
+                <p> Level of Consciousness: {{ message['loc'] }}</p>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+

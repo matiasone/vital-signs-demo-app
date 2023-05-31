@@ -3,11 +3,13 @@ from .events import socketio_server
 from .routes import main
 from flask_mqtt import Mqtt
 from .mqtt_client import mqtt_client
+from flask_cors import CORS, cross_origin
 
-msg = []
+#msg = []
 
 def create_app():
     app = Flask(__name__)
+    CORS(app, supports_credentials=True)
     app.config['SECRET_KEY'] = '9a6212f13d2370e87d273e56d418630f6e60ccc1748e1e06'
 
     app.config['MQTT_BROKER_URL'] = "broker.hivemq.com"

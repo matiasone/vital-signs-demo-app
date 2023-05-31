@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>{% block title %} Add a New Message {% endblock %}</h1>
+    <h1>{% block title %} Add an entry for Pulse Oximetry sensoring {% endblock %}</h1>
     <button id="getDataButton">Get Max30102 Data</button>
     <form method="post">
         <label for="name">Name</label>
@@ -56,12 +56,8 @@
             console.log("User waiting for data to display")
           })
           // listen for mqtt_message events
-          socket.on("xd", function() {
-            console.log("xd")
-          })
           // when a new message is received, log and append the data to the page
           socket.on('mqtt_message', function(data) {
-            console.log("hola chao");
             console.log(data);
             if (data["topic"] == "/Max30102FromESP32") {
               var text = data['payload'];

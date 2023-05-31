@@ -16,10 +16,13 @@ dnspython==2.3.0
 eventlet==0.33.3
 filelock==3.12.0
 Flask==2.0.3
+Flask-Cors==3.0.10
 Flask-MQTT==1.1.1
 Flask-SocketIO==4.3.2
 flatbuffers==23.1.21
 gast==0.4.0
+gevent==22.10.2
+gevent-websocket==0.10.1
 google-auth==2.16.0
 google-auth-oauthlib==0.4.6
 google-pasta==0.2.0
@@ -55,6 +58,7 @@ platformdirs==3.5.1
 protobuf==3.19.6
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
+PyGObject==3.42.1
 PyJWT==2.3.0
 pyparsing==2.4.7
 python-apt==2.4.0+ubuntu1
@@ -88,3 +92,5 @@ Werkzeug==2.0.3
 wrapt==1.14.1
 wsproto==1.2.0
 zipp==1.0.0
+zope.event==4.6
+zope.interface==6.0

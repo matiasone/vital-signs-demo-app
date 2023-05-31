@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>{% block title %} Add an entry for EWS protocol {% endblock %}</h1>
+    <h1>{% block title %} Add an entry for Suplemental Oxygen Demand Prediction{% endblock %}</h1>
     <button id="getDataButton">Get Max30102 Data</button>
     <form method="post">
         <label for="name">Name</label>
@@ -39,49 +39,29 @@
                   cols="30"
                   >{{ request.form['spo2'] }}</textarea>
         <br>
-        <label for="t">Temperature</label>
+        <label for="age">Age</label>
         <br>
-        <textarea id = "TemperatureTextArea"
-                  name="t"
-                  placeholder="36"
+        <textarea id = "AgeTextArea"
+                  name="age"
+                  placeholder="25"
                   rows="1"
                   cols="30"
-                  >{{ request.form['t'] }}</textarea>
+                  >{{ request.form['age'] }}</textarea>
         <br>
-        <label for="sbp">Systolic Blood Pressure</label>
+        <label for="gender">Gender</label>
         <br>
-        <textarea id = "SBPTextArea"
-                  name="sbp"
-                  placeholder="144"
-                  rows="1"
-                  cols="30"
-                  >{{ request.form['sbp'] }}</textarea>
+        <select id = "GenderTextArea" name="gender">
+          <option value=0>Female</option>
+          <option value=1>Male</option>
+        </select>
         <br>
-        <label for="rr">Respiration Rate</label>
+        <label for="hc">Patient had covid?</label>
         <br>
-        <textarea id = "RespirationRateTextArea"
-                  name="rr"
-                  placeholder="98"
-                  rows="1"
-                  cols="30"
-                  >{{ request.form['rr'] }}</textarea>
-        <br>
-        <label for="so">Use of Suplemental Oxygen?</label>
-        <br>
-        <select id = "SuplementalOxygenTextArea" name="so">
+        <select id = "HadCovidTextArea" name="hadCovid">
           <option value=0>No</option>
           <option value=1>Yes</option>
         </select>
         <br>
-        <label for="rr">Level of Consciousness</label>
-        <br>
-        <select id = "LevelOfConsciousnessSelect" name="loc" placeholder="A">
-          <option value="A">Alert</option>
-          <option value="C">Confused</option>
-          <option value="V">Responsive to voice</option>
-          <option value="P">Responsive to pain</option>
-          <option value="U">Unresponsive</option>
-        </select>
         <br>
         <button type="submit">Submit</button>
       </form>

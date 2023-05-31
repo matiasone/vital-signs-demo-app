@@ -5,10 +5,6 @@ from .mqtt_client import mqtt_client
 def handle_connect():
     print("SocketIO client connected!")
 
-@socketio_server.on("xd")
-def handle_xd():
-    print("SocketIO client: xd")
-
 @socketio_server.on("get_esp32_data")
 def handle_get_data():
     print(f'sent data request --> ActivateESP32')

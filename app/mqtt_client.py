@@ -5,12 +5,24 @@ mqtt_client = Mqtt()
 
 activateESP32 = "/flask/mqtt/ActivarESP32"
 receiveDataTopic = "/Max30102FromESP32"
-sendDataTopic = '/flask/mqtt/PatientDataFromFlaskApp'
-sendHRSpO2DataTopic = "/flask/mqtt/Max30102(1)"
-sendEWSDataTopic = "/flask/mqtt/EWS"
-sendOxyDemandDataTopic = "flask/mqtt/OxygenDemand"
-sendHealthStatusDataTopic = "flask/mqtt/HealthStatus"
-sendHealthAdvisorDataTopic = "flask/mqtt/HealthAdvisor"
+#sendHRSpO2DataTopic = "/flask/mqtt/Max30102(1)"
+#sendEWSDataTopic = "/flask/mqtt/EWS"
+#sendOxyDemandDataTopic = "flask/mqtt/OxygenDemand"
+#sendHealthStatusDataTopic = "flask/mqtt/HealthStatus"
+#sendHealthAdvisorDataTopic = "flask/mqtt/HealthAdvisor"
+sendHRSpO2DataTopic = "/Max30102(1)"
+sendEWSDataTopic = "/EWS"
+sendOxyDemandDataTopic = "/OxygenDemand"
+sendHealthStatusDataTopic = "/HealthStatus"
+sendHealthAdvisorDataTopic = "/HealthAdvisor"
+receiveHRSpO2ResponseStatusTopic = "/Max30102(1)ResponseStatus"
+receiveEWSResponseStatusTopic = "/EWSResponseStatus"
+receiveOxyDemandResponseStatusTopic = "/OxygenDemandResponseStatus"
+receiveHealthStatusResponseStatusTopic = "/HealthStatusResponseStatus"
+receiveHealthAdvisorResponseStatusTopic = "/HealthAdvisorResponseStatus"
+
+
+mqtt_msgs = []
 
 @mqtt_client.on_connect()
 def handle_connect(client, userdata, flags, rc):
@@ -20,7 +32,16 @@ def handle_connect(client, userdata, flags, rc):
        print(f'Subscribed to {receiveDataTopic}')
        mqtt_client.subscribe(activateESP32) # subscribe topic
        print(f'Subscribed to {activateESP32}')
-       mqtt_client.subscribe("xd")
+       mqtt_client.subscribe(sendHRSpO2DataTopic) # subscribe topic
+       print(f'Subscribed to {sendHRSpO2DataTopic}')
+       mqtt_client.subscribe(sendEWSDataTopic) # subscribe topic
+       print(f'Subscribed to {sendEWSDataTopic}')
+       mqtt_client.subscribe(sendOxyDemandDataTopic) # subscribe topic
+       print(f'Subscribed to {sendOxyDemandDataTopic}')
+       mqtt_client.subscribe(sendHealthStatusDataTopic) # subscribe topic
+       print(f'Subscribed to {sendHealthStatusDataTopic}')
+       mqtt_client.subscribe(sendHealthAdvisorDataTopic) # subscribe topic
+       print(f'Subscribed to {sendHealthAdvisorDataTopic}')
    else:
        print('Bad connection. Code:', rc)
 
@@ -46,9 +67,43 @@ def handle_mqtt_message(client, userdata, message):
         print(data["payload"])
         socketio_server.emit("mqtt_message", data=data)
         print("mensaje mqtt enviado por socketIO")
-    elif data["topic"] == "xd":
-        print("Le metimos xd")
-        socketio_server.emit("xd")
+    elif data["topic"] == receiveEWSResponseStatusTopic:
+        print("Recibimos el EWS RESPONSE")
+        print(data["payload"])
+        data["id"] = len(mqtt_msgs) + 1
+        data["type"] = "EWSResponseStatus"
+        mqtt_msgs.append(data)
+        print(mqtt_msgs)
+        #socketio_server.emit("mqtt_message", data=data)
+    elif data["topic"] == receiveHRSpO2ResponseStatusTopic:
+        print("Recibimos el HR&SpO2 RESPONSE")
+        print(data["payload"])
+        data["id"] = len(mqtt_msgs) + 1
+        data["type"] = "HR&SPO2ResponseStatus"
+        mqtt_msgs.append(data)
+        print(mqtt_msgs)
+    elif data["topic"] == receiveOxyDemandResponseStatusTopic:
+        print("Recibimos el Oxy demand RESPONSE")
+        print(data["payload"])
+        data["id"] = len(mqtt_msgs) + 1
+        data["type"] = "OxygenDemandResponseStatus"
+        mqtt_msgs.append(data)
+        print(mqtt_msgs)
+    elif data["topic"] == receiveHealthStatusResponseStatusTopic:
+        print("Recibimos el Health status RESPONSE")
+        print(data["payload"])
+        data["id"] = len(mqtt_msgs) + 1
+        data["type"] = "HealthStatusResponseStatus"
+        mqtt_msgs.append(data)
+        print(mqtt_msgs)
+    elif data["topic"] == receiveHealthAdvisorResponseStatusTopic:
+        print("Recibimos el Health advisor RESPONSE")
+        print(data["payload"])
+        data["id"] = len(mqtt_msgs) + 1
+        data["type"] = "HealthAdvisorResponseStatus"
+        mqtt_msgs.append(data)
+        print(mqtt_msgs)
+
 
 
 @mqtt_client.on_log()

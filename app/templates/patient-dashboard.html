@@ -1,0 +1,367 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Patient Dashboard: {{patient_data[1]}} - {{patient_data[0]}} {% endblock %}</h1>
+    <div class="row">
+        <div class="column">
+            <div class="index-style-4">
+                <div class="container">
+                    <h1>HR and SpO2</h1>
+                    <div style="height: 30vh; width: 90%;">
+                        <canvas id="hrChart"></canvas>
+                    </div>
+                    <div style="height: 30vh; width: 90%;">
+                        <canvas id="spo2Chart"></canvas>
+                    </div>
+                    <br>
+                    <h1>Health Status</h1>
+                    <div style="height: 30vh; width: 90%;">
+                        <canvas id="healthStatusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="index-style-4">
+                <div class="container">
+                    <h1>Early Warning Score</h1>
+                    <div style="height: 20vh; width: 90%;">
+                        <canvas id="ewsScoreChart"></canvas>
+                    </div>
+                    <div style="height: 20vh; width: 90%;">
+                        <canvas id="tChart"></canvas>
+                    </div>
+                    <div style="height: 20vh; width: 90%;">
+                        <canvas id="sbpChart"></canvas>
+                    </div>
+                    <div style="height: 20vh; width: 90%;">
+                        <canvas id="rrChart"></canvas>
+                    </div>
+                    <div style="height: 20vh; width: 90%;">
+                        <canvas id="soChart"></canvas>
+                    </div>
+                    <div style="height: 20vh; width: 90%;">
+                        <canvas id="locChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="index-style-4">
+                <div class="container">
+                    <h1>Patient personal data:</h1>
+                    <h3>Name: {{patient_data[1]}}</h1>
+                    <h3>Rut: {{patient_data[0]}}</h3>
+                    <h3>Age: {{patient_data[2]}}</h3>
+                    <h3>Gender: {{patient_data[3]}}</h3>
+                    <h3>Had Covid: {{patient_data[4]}}</h3>
+                    <br>
+                    <h1>Health Advisor</h1>
+                    <div style="height: 30vh; width: 90%;">
+                        <canvas id="healthAdvisorChart"></canvas>
+                    </div>
+                    <br>
+                    <h1>Suplemental Oxygen</h1>
+                    <div style="height: 30vh; width: 90%;">
+                        <canvas id="oxygenDemandChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <script>
+        const max30102labels = {{ max30102labels | tojson}};
+
+        const hr_data = {
+            labels: max30102labels,
+            datasets: [{
+                label: 'HR',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: {{ hr_data | tojson}},
+                tension: 0.1
+            }]
+        };
+        const hr_config = {
+            type: 'line',
+            data: hr_data,
+            options: { maintainAspectRatio: false }
+        };
+        const hrChart = new Chart(
+            document.getElementById('hrChart'),
+            hr_config
+        );
+
+        const spo2_data = {
+            labels: max30102labels,
+            datasets: [{
+                label: 'SpO2',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: {{ spo2_data | tojson}},
+                tension: 0.1
+            }]
+        };
+        const spo2_config = {
+            type: 'line',
+            data: spo2_data,
+            options: { maintainAspectRatio: false }
+        };
+        const spo2Chart = new Chart(
+            document.getElementById('spo2Chart'),
+            spo2_config
+        );
+
+        const ews_labels = {{ ews_labels | tojson}};
+
+        const ews_data = {
+            labels: ews_labels,
+            datasets: [{
+                label: 'Early Warning Score',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: {{ ews_results[1] | tojson}},
+                tension: 0.1
+            }]
+        };
+        const ews_config = {
+            type: 'line',
+            data: ews_data,
+            options: { maintainAspectRatio: false }
+        };
+        const ewsChart = new Chart(
+            document.getElementById('ewsScoreChart'),
+            ews_config
+        );
+
+        const t_labels = {{ t_labels | tojson}};
+
+        const t_data = {
+            labels: t_labels,
+            datasets: [{
+                label: 'Temperature',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: {{ t_data | tojson}},
+                tension: 0.1
+            }]
+        };
+        const t_config = {
+            type: 'line',
+            data: t_data,
+            options: { maintainAspectRatio: false }
+        };
+        const tChart = new Chart(
+            document.getElementById('tChart'),
+            t_config
+        );
+
+        const sbp_labels = {{ sbp_labels | tojson}};
+
+        const sbp_data = {
+            labels: sbp_labels,
+            datasets: [{
+                label: 'Systolic blood pressure',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: {{ sbp_data | tojson}},
+                tension: 0.1
+            }]
+        };
+        const sbp_config = {
+            type: 'line',
+            data: sbp_data,
+            options: { maintainAspectRatio: false }
+        };
+        const sbpChart = new Chart(
+            document.getElementById('sbpChart'),
+            sbp_config
+        );
+
+        const rr_data = {
+            labels: ews_labels,
+            datasets: [{
+                label: 'Respiration Rate',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: {{ rr_data | tojson}},
+                tension: 0.1
+            }]
+        };
+        const rr_config = {
+            type: 'line',
+            data: rr_data,
+            options: { maintainAspectRatio: false }
+        };
+        const rrChart = new Chart(
+            document.getElementById('rrChart'),
+            rr_config
+        );
+
+        const so_data = {
+            datasets: [{
+                label: 'Use of Suplemental Oxygen',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: {{so_data | tojson}},
+                tension: 0.1}]
+        };
+        const so_config = {
+            type: 'line',
+            data: so_data,
+            options: {
+                responsive: true,
+                legend: {
+                    display: true
+                },
+                scales: {
+                    x: {
+                        type: "category",
+                        labels: ews_labels
+                    },
+                    y: {
+                        type: 'category',
+                        position: 'left',
+                        labels: ["No SO", "SO"]
+                    }
+                }
+            }
+        };
+        const soChart = new Chart(
+            document.getElementById('soChart'),
+            so_config
+        );
+
+        const loc_data = {
+            datasets: [{
+                label: 'Level of Consciousness',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: {{ loc_data | tojson}},
+                tension: 0.1
+            }]
+        };
+        const loc_config = {
+            type: 'line',
+            data: loc_data,
+            options: {
+                responsive: true,
+                legend: {
+                    display: true
+                },
+                scales: {
+                    x: {
+                        type: "category",
+                        labels: ews_labels
+                    },
+                    y: {
+                        type: 'category',
+                        position: 'left',
+                        labels: ["Alert", "Confused", "Responsive to voice", "Responsive to pain", "Unresponsive"],
+                    }
+                }
+            }
+        };
+        const locChart = new Chart(
+            document.getElementById('locChart'),
+            loc_config
+        );
+
+        const health_status_labels = {{ health_status_labels | tojson}};
+
+        const health_status_data = {
+            datasets: [{
+                label: 'Health Status',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: {{ health_status_data[0] | tojson}},
+                tension: 0.1
+            }]
+        };
+        const health_status_config = {
+            type: 'line',
+            data: health_status_data,
+            options: {
+                responsive: true,
+                legend: {
+                    display: true
+                },
+                scales: {
+                    x: {
+                        type: "category",
+                        labels: health_status_labels
+                    },
+                    y: {
+                        type: 'category',
+                        position: 'left',
+                        labels: ["0- no parameters out of the norm", "1- patient is sick, not life-threatening", "2- patient's life is in danger"],
+                    }
+                }
+            }
+        };
+        const healthStatusChart = new Chart(
+            document.getElementById('healthStatusChart'),
+            health_status_config
+        );
+
+        const health_advisor_labels = {{ health_advisor_labels | tojson}};
+
+        const health_advisor_data = {
+            datasets: [{
+                label: 'Health Advisor',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: {{ health_advisor_data[0] | tojson}},
+                tension: 0.1
+            }]
+        };
+        const health_advisor_config = {
+            type: 'line',
+            data: health_advisor_data,
+            options: {
+                responsive: true,
+                legend: {
+                    display: true
+                },
+                scales: {
+                    x: {
+                        type: "category",
+                        labels: health_advisor_labels
+                    },
+                    y: {
+                        type: 'category',
+                        position: 'left',
+                        labels: ["1 - Healthy", "2 - High BP", "3 - Low BP", "4 - High Sugar", "5 - Low Sugar", "6 - Low Oxygen","7 - High Temperature", "8 - Heartbeat is high", "9 - Risk"],
+                    }
+                }
+            }
+        };
+        const healthAdvisorChart = new Chart(
+            document.getElementById('healthAdvisorChart'),
+            health_advisor_config
+        );
+
+        const oxygen_demand_labels = {{ oxygen_demand_labels | tojson}};
+
+        const oxygen_demand_data = {
+            labels: oxygen_demand_labels,
+            datasets: [{
+                label: 'Suplementar Oxygen Prediction',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: {{ oxygen_demand_data | tojson}},
+                tension: 0.1
+            }]
+        };
+        const oxygen_demand_config = {
+            type: 'line',
+            data: oxygen_demand_data,
+            options: { maintainAspectRatio: false }
+        };
+        const oxygenDemandChart = new Chart(
+            document.getElementById('oxygenDemandChart'),
+            oxygen_demand_config
+        );
+    </script>
+{% endblock %}

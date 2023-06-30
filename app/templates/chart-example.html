@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Chartjs Charts {% endblock %}</h1>
+    <div style="height: 50vh; width: 50%;">
+        <canvas id="locChart"></canvas>
+    </div>
+    <div style="height: 50vh; width: 50%;">
+        <canvas id="soChart"></canvas>
+    </div>
+ 
+    <script>
+        const labels = {{ labels | tojson}};
+        const so_data = {
+            datasets: [{
+                label: 'Use of Suplemental Oxygen',
+                backgroundColor: 'rgb(211, 99, 132)',
+                borderColor: 'rgb(211, 99, 132)',
+                data: {{so_data | tojson}},
+                tension: 0.1
+            }]
+        };
+        const so_config = {
+            type: 'line',
+            data: so_data,
+            options: {
+                responsive: true,
+                legend: {
+                    display: true
+                },
+                scales: {
+                    x: {
+                        type: "category",
+                        labels: labels
+                    },
+                    y: {
+                        type: 'category',
+                        position: 'left',
+                        labels: ["No SO", "SO"]
+                    }
+                }
+            }
+        };
+        const soChart = new Chart(
+            document.getElementById('soChart'),
+            so_config
+        );
+
+        const loc_data = {
+            datasets: [{
+                label: 'Level of Consciousness',
+                backgroundColor: 'rgb(211, 99, 132)',
+                borderColor: 'rgb(211, 99, 132)',
+                data: {{ loc_data | tojson}},
+                tension: 0.1
+            }]
+        };
+        const loc_config = {
+            type: 'line',
+            data: loc_data,
+            options: {
+                responsive: true,
+                legend: {
+                    display: true
+                },
+                scales: {
+                    x: {
+                        type: "category",
+                        labels: labels
+                    },
+                    y: {
+                        type: 'category',
+                        position: 'left',
+                        labels: ["Alert", "Confused", "Responsive to voice", "Responsive to pain", "Unresponsive"],
+                    }
+                }
+            }
+        };
+        const locChart = new Chart(
+            document.getElementById('locChart'),
+            loc_config
+        );
+ 
+    </script>
+{% endblock %}

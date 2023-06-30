@@ -1,114 +1,127 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} Messages {% endblock %}</h1>
-    {% for message in messages %}
-        {% if message["type"] == "HR&SPO2" %}
-            <div class='message_hrspo2'>
-                <h3> ID: {{ message['id'] }}</h3>
-                <p> Type: {{ message['type'] }}</p>
-                <p> Name: {{ message['name'] }}</p>
-                <p> Rut: {{ message['rut'] }}</p>
-                <p> Heart rate: {{ message['hr'] }}</p>
-                <p> Oxygen Saturation: {{ message['spo2'] }}</p>
-                <a href="{{ url_for('main.max30102_results_by_id', id=message['id']) }}">Show query result</a>
-            </div>
-        {% endif %}
-        {% if message["type"] == "EWS" %}
-            <div class='message_ews'>
-                <h3> ID: {{ message['id'] }}</h3>
-                <p> Type: {{ message['type'] }}</p>
-                <p> Name: {{ message['name'] }}</p>
-                <p> Rut: {{ message['rut'] }}</p>
-                <p> Heart rate: {{ message['hr'] }}</p>
-                <p> Oxygen Saturation: {{ message['spo2'] }}</p>
-                <p> Temperature: {{ message['t'] }}</p>
-                <p> Systolic Blood Pressure: {{ message['sbp'] }}</p>
-                <p> Respiration Rate: {{ message['rr'] }}</p>
-                <p> Suplemental Oxygen: {{ message['so'] }}</p>
-                <p> Level of Consciousness: {{ message['loc'] }}</p>
-                <a href="{{ url_for('main.ews_results_by_id', id=message['id']) }}">Show query result</a>
-            </div>
-        {% endif %}
-        {% if message["type"] == "OxygenDemand" %}
-            <div class='message_ews'>
-                <h3> ID: {{ message['id'] }}</h3>
-                <p> Type: {{ message['type'] }}</p>
-                <p> Name: {{ message['name'] }}</p>
-                <p> Rut: {{ message['rut'] }}</p>
-                <p> Heart rate: {{ message['hr'] }}</p>
-                <p> Oxygen Saturation: {{ message['spo2'] }}</p>
-                <p> Age: {{ message['age'] }}</p>
-                <p> Gender: {{ message['gender'] }}</p>
-                <p> Patient Had Covid?: {{ message['hadCovid'] }}</p>
-                <a href="{{ url_for('main.oxy_demand_results_by_id', id=message['id']) }}">Show query result</a>
-            </div>
-        {% endif %}
-        {% if message["type"] == "HealthStatus" %}
-            <div class='message_ews'>
-                <h3> ID: {{ message['id'] }}</h3>
-                <p> Type: {{ message['type'] }}</p>
-                <p> Name: {{ message['name'] }}</p>
-                <p> Rut: {{ message['rut'] }}</p>
-                <p> Heart rate: {{ message['hr'] }}</p>
-                <p> Oxygen Saturation: {{ message['spo2'] }}</p>
-                <p> Temperature: {{ message['t'] }}</p>
-                <a href="{{ url_for('main.health_status_results_by_id', id=message['id']) }}">Show query result</a>
-            </div>
-        {% endif %}
-        {% if message["type"] == "HealthAdvisor" %}
-            <div class='message_ews'>
-                <h3> ID: {{ message['id'] }}</h3>
-                <p> Type: {{ message['type'] }}</p>
-                <p> Name: {{ message['name'] }}</p>
-                <p> Rut: {{ message['rut'] }}</p>
-                <p> Heart rate: {{ message['hr'] }}</p>
-                <p> Oxygen saturation: {{ message['spo2'] }}</p>
-                <p> Age: {{ message['age'] }}</p>
-                <p> Gender: {{ message['gender'] }}</p>
-                <p> Glucose level: {{ message['glucose'] }}</p>
-                <p> Temperature: {{ message['t'] }}</p>
-                <p> Systolic blood pressure: {{ message['sbp'] }}</p>
-                <p> Diastolic blood pressure: {{ message['dbp'] }}</p>
-                <a href="{{ url_for('main.health_advisor_results_by_id', id=message['id']) }}">Show query result</a>
-            </div>
-        {% endif %}
-        {% if message["type"] == "EWSResponseStatus" %}
-            <div class='message_ews'>
-                <h3> ID: {{ message['id'] }}</h3>
-                <p> Type: {{ message['type'] }}</p>
-                <p> Result: {{ message['payload'] }}</p>
-            </div>
-        {% endif %}
-        {% if message["type"] == "HR&SPO2ResponseStatus" %}
-            <div class='message_ews'>
-                <h3> ID: {{ message['id'] }}</h3>
-                <p> Type: {{ message['type'] }}</p>
-                <p> result: {{ message['payload'] }}</p>
-            </div>
-        {% endif %}
-        {% if message["type"] == "OxygenDemandResponseStatus" %}
-            <div class='message_ews'>
-                <h3> ID: {{ message['id'] }}</h3>
-                <p> Type: {{ message['type'] }}</p>
-                <p> result: {{ message['payload'] }}</p>
-            </div>
-        {% endif %}
-        {% if message["type"] == "HealthStatusResponseStatus" %}
-            <div class='message_ews'>
-                <h3> ID: {{ message['id'] }}</h3>
-                <p> Type: {{ message['type'] }}</p>
-                <p> result: {{ message['payload'] }}</p>
-            </div>
-        {% endif %}
-        {% if message["type"] == "HealthAdvisorResponseStatus" %}
-            <div class='message_ews'>
-                <h3> ID: {{ message['id'] }}</h3>
-                <p> Type: {{ message['type'] }}</p>
-                <p> result: {{ message['payload'] }}</p>
-            </div>
-        {% endif %}
-    {% endfor %}
+    <div class="index-style-4">
+        <h1>{% block title %} Messages {% endblock %}</h1>
+        <label for="rut"><h2>Filter by RUT</h2></label>
+        <br>
+        <div id="container">
+            <form action="{{ url_for('main.viewDataByRut')}}" method="get">
+                <input id = "RutTextArea" name="rut"></input>
+                <input type="submit" id="filterButton" name="rut_button" value="Filter"></input>
+                <input type="submit" id="stopFilterButton" name="no_rut_button" value="Clear Filter"></input>
+            <form>
+        </div>
+    </div>
+    <script type="text/javascript" charset="utf-8">
+        const socket = io({autoConnect: false})
+        socket.connect();
+          // listen for mqtt_message events
+          // when a new message is received, log and append the data to the page
+        socket.on('mqtt_response_display', function(data) {
+            console.log(messages)
+            console.log(data);
+            if (data["topic"] == "/Max30102(1)ResponseStatus") {
+                strr = "Max30102_"+data["id"]
+                console.log(strr)
+                doc = document.getElementById(strr)
+                console.log(doc)
+                doc.style.display=""
+            }
+            else if (data["topic"] == "/EWSResponseStatus") {
+                strr = "EWS_"+data["id"]
+                doc = document.getElementById(strr)
+                doc.style.display=""
+            }
+            else if (data["topic"] == "/OxygenDemandResponseStatus") {
+                strr = "OxyDemand_"+data["id"]
+                doc = document.getElementById(strr)
+                doc.style.display=""
+            }
+            else if (data["topic"] == "/HealthStatusResponseStatus") {
+                strr = "HealthStatus_"+data["id"]
+                doc = document.getElementById(strr)
+                doc.style.display=""
+            }
+            else if (data["topic"] == "/HealthAdvisorResponseStatus") {
+                strr = "HealthAdvisor_"+data["id"]
+                doc = document.getElementById(strr)
+                doc.style.display=""
+            }
+        })
+    </script>
+    <div class="form-style-5">
+        {% for message in messages %}
+            {% if message["type"] == "HR&SPO2" %}
+                <div class='message_hrspo2'>
+                    <h3> ID: {{ message['id'] }}</h3>
+                    <p> Type: {{ message['type'] }}</p>
+                    <p> Name: {{ message['name'] }}</p>
+                    <p> Rut: {{ message['rut'] }}</p>
+                    <p> Heart rate: {{ message['hr'] }}</p>
+                    <p> Oxygen Saturation: {{ message['spo2'] }}</p>
+                    <a class="showQueryMax30102" id = "Max30102_{{message['id']}}" href="{{ url_for('main.max30102_results_by_id', id=message['id']) }}">Show query result</a>
+                </div>
+            {% endif %}
+            {% if message["type"] == "EWS" %}
+                <div class='message_ews'>
+                    <h3> ID: {{ message['id'] }}</h3>
+                    <p> Type: {{ message['type'] }}</p>
+                    <p> Name: {{ message['name'] }}</p>
+                    <p> Rut: {{ message['rut'] }}</p>
+                    <p> Heart rate: {{ message['hr'] }}</p>
+                    <p> Oxygen Saturation: {{ message['spo2'] }}</p>
+                    <p> Temperature: {{ message['t'] }}</p>
+                    <p> Systolic Blood Pressure: {{ message['sbp'] }}</p>
+                    <p> Respiration Rate: {{ message['rr'] }}</p>
+                    <p> Suplemental Oxygen: {{ message['so'] }}</p>
+                    <p> Level of Consciousness: {{ message['loc'] }}</p>
+                    <a class="showQueryEWS" id = "EWS_{{message['id']}}" href="{{ url_for('main.ews_results_by_id', id=message['id']) }}">Show query result</a>
+                </div>
+            {% endif %}
+            {% if message["type"] == "OxygenDemand" %}
+                <div class='message_ews'>
+                    <h3> ID: {{ message['id'] }}</h3>
+                    <p> Type: {{ message['type'] }}</p>
+                    <p> Name: {{ message['name'] }}</p>
+                    <p> Rut: {{ message['rut'] }}</p>
+                    <p> Heart rate: {{ message['hr'] }}</p>
+                    <p> Oxygen Saturation: {{ message['spo2'] }}</p>
+                    <p> Age: {{ message['age'] }}</p>
+                    <p> Gender: {{ message['gender'] }}</p>
+                    <p> Patient Had Covid?: {{ message['hadCovid'] }}</p>
+                    <a class="showQueryOxyDemand" id = "OxyDemand_{{message['id']}}" href="{{ url_for('main.oxy_demand_results_by_id', id=message['id']) }}">Show query result</a>
+                </div>
+            {% endif %}
+            {% if message["type"] == "HealthStatus" %}
+                <div class='message_ews'>
+                    <h3> ID: {{ message['id'] }}</h3>
+                    <p> Type: {{ message['type'] }}</p>
+                    <p> Name: {{ message['name'] }}</p>
+                    <p> Rut: {{ message['rut'] }}</p>
+                    <p> Heart rate: {{ message['hr'] }}</p>
+                    <p> Oxygen Saturation: {{ message['spo2'] }}</p>
+                    <p> Temperature: {{ message['t'] }}</p>
+                    <a class="showQueryHealthStatus" id = "HealthStatus_{{message['id']}}" href="{{ url_for('main.health_status_results_by_id', id=message['id']) }}">Show query result</a>
+                </div>
+            {% endif %}
+            {% if message["type"] == "HealthAdvisor" %}
+                <div class='message_ews'>
+                    <h3> ID: {{ message['id'] }}</h3>
+                    <p> Type: {{ message['type'] }}</p>
+                    <p> Name: {{ message['name'] }}</p>
+                    <p> Rut: {{ message['rut'] }}</p>
+                    <p> Heart rate: {{ message['hr'] }}</p>
+                    <p> Oxygen saturation: {{ message['spo2'] }}</p>
+                    <p> Age: {{ message['age'] }}</p>
+                    <p> Gender: {{ message['gender'] }}</p>
+                    <p> Glucose level: {{ message['glucose'] }}</p>
+                    <p> Temperature: {{ message['t'] }}</p>
+                    <p> Systolic blood pressure: {{ message['sbp'] }}</p>
+                    <p> Diastolic blood pressure: {{ message['dbp'] }}</p>
+                    <a class="showQueryHealthAdvisor" id = "HealthAdvisor_{{message['id']}}" href="{{ url_for('main.health_advisor_results_by_id', id=message['id']) }}">Show query result</a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
 {% endblock %}
-
-

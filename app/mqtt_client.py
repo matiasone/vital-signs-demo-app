@@ -1,15 +1,17 @@
 from flask_mqtt import Mqtt
 from .extensions import socketio_server
+from datetime import datetime
 
 mqtt_client = Mqtt()
 
-activateESP32 = "/flask/mqtt/ActivarESP32"
+#activateESP32 = "/flask/mqtt/ActivarESP32"
 receiveDataTopic = "/Max30102FromESP32"
 #sendHRSpO2DataTopic = "/flask/mqtt/Max30102(1)"
 #sendEWSDataTopic = "/flask/mqtt/EWS"
 #sendOxyDemandDataTopic = "flask/mqtt/OxygenDemand"
 #sendHealthStatusDataTopic = "flask/mqtt/HealthStatus"
 #sendHealthAdvisorDataTopic = "flask/mqtt/HealthAdvisor"
+activateESP32 = "/ActivarESP32"
 sendHRSpO2DataTopic = "/Max30102(1)"
 sendEWSDataTopic = "/EWS"
 sendOxyDemandDataTopic = "/OxygenDemand"
@@ -52,11 +54,15 @@ def handle_mqtt_publish(client, userdata, mid):
 
 @mqtt_client.on_message()
 def handle_mqtt_message(client, userdata, message):
+    from .routes import msg
     data = dict(
        topic=message.topic,
        payload=message.payload.decode()
         )
     print('Received message on topic: {topic} with payload: {payload}'.format(**data))
+    print("MSG:", msg)
+    now = datetime.now()
+    date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
     if data["topic"] == receiveDataTopic:
         print("¡¡¡TENEMOS QUE PASARLE ESTA INFORMACIÓN IMPORTANTE AL USUARIO!!!")
         print(data["payload"])
@@ -70,40 +76,91 @@ def handle_mqtt_message(client, userdata, message):
     elif data["topic"] == receiveEWSResponseStatusTopic:
         print("Recibimos el EWS RESPONSE")
         print(data["payload"])
-        data["id"] = len(mqtt_msgs) + 1
+        data["id"] = len(msg)
+        data["rut"] = msg[len(msg)-1]["rut"]
+        data["name"] = msg[len(msg)-1]["name"]
+        data["datetime"] = date_time
         data["type"] = "EWSResponseStatus"
-        mqtt_msgs.append(data)
+        include = True
+        for i in mqtt_msgs:
+            if i["id"] == data["id"]:
+                print("ESTA ENTRADA YA ESTÁ, NO DEBERÍAMOS DEJARLA PASAR MIERDA")
+                include = False
+        if include:
+            print("La dejamos pasar jiji")
+            mqtt_msgs.append(data)
         print(mqtt_msgs)
-        #socketio_server.emit("mqtt_message", data=data)
+        socketio_server.emit("mqtt_response_display", data=data)
     elif data["topic"] == receiveHRSpO2ResponseStatusTopic:
         print("Recibimos el HR&SpO2 RESPONSE")
         print(data["payload"])
-        data["id"] = len(mqtt_msgs) + 1
+        data["id"] = len(msg)
+        data["rut"] = msg[len(msg)-1]["rut"]
+        data["name"] = msg[len(msg)-1]["name"]
+        data["datetime"] = date_time
         data["type"] = "HR&SPO2ResponseStatus"
-        mqtt_msgs.append(data)
+        include = True
+        for i in mqtt_msgs:
+            if i["id"] == data["id"]:
+                include = False
+        if include:
+            mqtt_msgs.append(data)
         print(mqtt_msgs)
+        socketio_server.emit("mqtt_response_display", data=data)
     elif data["topic"] == receiveOxyDemandResponseStatusTopic:
         print("Recibimos el Oxy demand RESPONSE")
         print(data["payload"])
-        data["id"] = len(mqtt_msgs) + 1
+        data["id"] = len(msg)
+        data["rut"] = msg[len(msg)-1]["rut"]
+        data["name"] = msg[len(msg)-1]["name"]
+        data["datetime"] = date_time
         data["type"] = "OxygenDemandResponseStatus"
-        mqtt_msgs.append(data)
+        include = True
+        for i in mqtt_msgs:
+            if i["id"] == data["id"]:
+                print("ESTA ENTRADA YA ESTÁ, NO DEBERÍAMOS DEJARLA PASAR MIERDA")
+                include = False
+        if include:
+            print("La dejamos pasar jiji")
+            mqtt_msgs.append(data)
         print(mqtt_msgs)
+        socketio_server.emit("mqtt_response_display", data=data)
     elif data["topic"] == receiveHealthStatusResponseStatusTopic:
         print("Recibimos el Health status RESPONSE")
         print(data["payload"])
-        data["id"] = len(mqtt_msgs) + 1
+        data["id"] = len(msg)
+        data["rut"] = msg[len(msg)-1]["rut"]
+        data["name"] = msg[len(msg)-1]["name"]
+        data["datetime"] = date_time
         data["type"] = "HealthStatusResponseStatus"
-        mqtt_msgs.append(data)
+        include = True
+        for i in mqtt_msgs:
+            if i["id"] == data["id"]:
+                print("ESTA ENTRADA YA ESTÁ, NO DEBERÍAMOS DEJARLA PASAR MIERDA")
+                include = False
+        if include:
+            print("La dejamos pasar jiji")
+            mqtt_msgs.append(data)
         print(mqtt_msgs)
+        socketio_server.emit("mqtt_response_display", data=data)
     elif data["topic"] == receiveHealthAdvisorResponseStatusTopic:
         print("Recibimos el Health advisor RESPONSE")
         print(data["payload"])
-        data["id"] = len(mqtt_msgs) + 1
+        data["id"] = len(msg)
+        data["rut"] = msg[len(msg)-1]["rut"]
+        data["name"] = msg[len(msg)-1]["name"]
+        data["datetime"] = date_time
         data["type"] = "HealthAdvisorResponseStatus"
-        mqtt_msgs.append(data)
+        include = True
+        for i in mqtt_msgs:
+            if i["id"] == data["id"]:
+                print("ESTA ENTRADA YA ESTÁ, NO DEBERÍAMOS DEJARLA PASAR MIERDA")
+                include = False
+        if include:
+            print("La dejamos pasar jiji")
+            mqtt_msgs.append(data)
         print(mqtt_msgs)
-
+        socketio_server.emit("mqtt_response_display", data=data)
 
 
 @mqtt_client.on_log()

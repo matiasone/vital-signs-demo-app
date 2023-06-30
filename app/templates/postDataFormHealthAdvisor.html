@@ -1,91 +1,35 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>{% block title %} Add an entry for Health Advisor Prediction {% endblock %}</h1>
-    <button id="getDataButton">Get Max30102 Data</button>
-    <form method="post">
-        <label for="name">Name</label>
-        <br>
-        <textarea id = "NameTextArea"
-                  name="name"
-                  placeholder="Juan Perez"
-                  rows="1"
-                  cols="30"
-                  >{{ request.form['name'] }}</textarea>
-        <br>
-        <label for="rut">Rut</label>
-        <br>
-        <textarea id = "RutTextArea"
-                  name="rut"
-                  placeholder="12345678-9"
-                  rows="1"
-                  cols="30"
-                  >{{ request.form['rut'] }}</textarea>
-        <br>
-        <label for="hr">Heart Rate</label>
-        <br>
-        <textarea id = "HRTextArea"
-                  name="hr"
-                  placeholder="60"
-                  rows="1"
-                  cols="30"
-                  >{{ request.form['hr'] }}</textarea>
-        <br>
-        <label for="spo2">Oxygen Saturation</label>
-        <br>
-        <textarea id = "SpO2TextArea"
-                  name="spo2"
-                  placeholder="98"
-                  rows="1"
-                  cols="30"
-                  >{{ request.form['spo2'] }}</textarea>
-        <br>
-        <label for="age">Age</label>
-        <br>
-        <textarea id = "AgeTextArea"
-                  name="age"
-                  placeholder="25"
-                  rows="1"
-                  cols="30"
-                  >{{ request.form['age'] }}</textarea>
-        <br>
-        <label for="gender">Gender</label>
-        <br>
-        <select id = "GenderTextArea" name="gender">
-          <option value=0>Female</option>
-          <option value=1>Male</option>
-        </select>
-        <br>
-        <label for="t">Temperature</label>
-        <br>
-        <textarea id = "TemperatureTextArea" name="t" placeholder="36"
-          rows="1"
-          cols="30"
-          >{{ request.form['t'] }}</textarea>
-        <br>
-        <label for="glucose">Glucose</label>
-        <br>
-        <textarea id = "GlucoseTextArea" name="glucose" placeholder="87"
-          rows="1"
-          cols="30"
-          >{{ request.form['glucose'] }}</textarea>
-        <br>
-        <label for="sbp">Systolic Blood Pressure</label>
-        <br>
-        <textarea id = "SBPTextArea" name="sbp" placeholder="144"
-          rows="1"
-          cols="30"
-          >{{ request.form['sbp'] }}</textarea>
-        <br>
-        <label for="dbp">Diastolic Blood Pressure</label>
-        <br>
-        <textarea id = "DBPTextArea" name="dbp" placeholder="92"
-          rows="1"
-          cols="30"
-          >{{ request.form['dbp'] }}</textarea>
-        <br>
-        <br>
-        <button type="submit">Submit</button>
+    <h1 style="display: none">{% block title %} Add an entry for Health Advisor Prediction {% endblock %}</h1>
+    <div class="form-style-5">
+      <h1 for="job">Add an entry for Health Advisor Prediction</h1>
+      <button id="getDataButton">Get Max30102 Data</button>
+      <form method="post">
+      <fieldset>
+      <legend><span class="number">1</span> Personal Data</legend>
+      <input id = "NameTextArea" type="text" name="name" placeholder="Your name *"></input>
+      <input id = "EmailTextArea" type="email" name="email" placeholder="Your email *"></input>
+      <input id = "RutTextArea" type = "text" name="rut" placeholder="Your RUT *"></input>  
+      </fieldset>
+      <fieldset>
+      <legend><span class="number">2</span> Vital Signs</legend>
+      <input id = "HRTextArea" type="text" name="hr" placeholder="Heart rate *"></input>
+      <input id = "SpO2TextArea" type="text" name="spo2" placeholder="Oxygen saturation *"></input>
+      <input id = "AgeTextArea" type="text" name="age" placeholder="Age *"></input>
+      <input id = "TemperatureTextArea" type="text" name="t" placeholder="Temperature *"></input>
+      <input id = "SBPTextArea" type="text" name="sbp" placeholder="Systolic blood pressure *"></input>
+      <input id = "DBPTextArea" type="text" name="dbp" placeholder="Diastolic blood pressure *"></input>
+      <input id = "GlucoseTextArea" type="text" name="glucose" placeholder="Glucose *"></input>
+      <label for="gender">Gender</label>
+      <select id = "GenderTextArea" name="gender">
+        <option value=0>Female</option>
+        <option value=1>Male</option>
+      </select>
+      </fieldset>
+      <input type="submit" value="Apply" />
       </form>
+    </div>
+    <button id="getDataButton">Get Max30102 Data</button>
     <script type="text/javascript" charset="utf-8">
         const socket = io({autoConnect: false})
         document.getElementById("getDataButton").addEventListener("click", function() {

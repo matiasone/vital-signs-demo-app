@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <script type="text/javascript" charset="utf-8">
+        var rut_filter = "none";
+        document.getElementById("filterButton").addEventListener("click", function() {
+            rut_filter = document.getElementById("RutTextArea").value;
+            document.getElementById("RutTextArea").value = "";
+        })
+        document.getElementById("stopFilterButton").addEventListener("click", function() {
+            rut_filter = "none";
+            document.getElementById("RutTextArea").value = "";
+        })
+    </script>
+    <div class="index-style-4">
+        <h1>{% block title %} Results {% endblock %}</h1>
+        <label for="rut"><h2>Filter by RUT</h2></label>
+        <br>
+        <div id="container">
+            <form action="{{ url_for('main.viewResultsByRut')}}" method="get">
+                <input id = "RutTextArea" name="rut"></input>
+                <input type="submit" id="filterButton" name="rut_button" value="Filter"></input>
+                <input type="submit" id="stopFilterButton" name="no_rut_button" value="Clear Filter"></input>
+            <form>
+        </div>
+    </div>
+    <div class="form-style-5">
+        {% for message in messages %}
+            <div class='message_ews'>
+                <h3> ID: {{ message['id'] }}</h3>
+                <p> Type: {{ message['type'] }}</p>
+                <p> Name: {{message["name"]}}</p>
+                <p> Rut: {{message["rut"]}}</p>
+                <p> DateTime: {{message["datetime"]}}</p>
+                <p> Result: {{ message['payload'] }}</p>
+                {% if message["type"] == "EWSResponseStatus" %}
+                    <a href="{{ url_for('main.ews_msgs_by_id', id=message['id']) }}">Show query request</a>
+                {% endif %}
+                {% if message["type"] == "HR&SPO2ResponseStatus" %}
+                    <a href="{{ url_for('main.max30102_msgs_by_id', id=message['id']) }}">Show query request</a>
+                {% endif %}
+                {% if message["type"] == "OxygenDemandResponseStatus" %}
+                    <a href="{{ url_for('main.oxy_demand_msgs_by_id', id=message['id']) }}">Show query request</a>
+                {% endif %}
+                {% if message["type"] == "HealthStatusResponseStatus" %}
+                    <a href="{{ url_for('main.health_status_msgs_by_id', id=message['id']) }}">Show query request</a>
+                {% endif %}
+                {% if message["type"] == "HealthAdvisorResponseStatus" %}
+                    <a href="{{ url_for('main.health_advisor_msgs_by_id', id=message['id']) }}">Show query request</a>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+

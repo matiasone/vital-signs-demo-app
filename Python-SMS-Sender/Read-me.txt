@@ -1,0 +1,4 @@
+Have the following installed before running:
+Either Python 2 or 3
+pip and virtualenv
+A free Snich account

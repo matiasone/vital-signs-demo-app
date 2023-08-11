@@ -9,10 +9,32 @@ from .mqtt_client import receiveHealthAdvisorResponseStatusTopic, sendHealthStat
 main = Blueprint("main", __name__)
 CORS(main)
 msg = []
+contacts_by_rut = []
 
 @main.route("/")
 def index():
     return render_template("index.html")
+
+@main.route("/register", methods=('GET', 'POST'))
+def register():
+    if request.method == 'POST':
+        print(request.form); print(len(request.form))
+        dicto = request.form.to_dict(flat=False)
+        print(dicto) # tiene la personal data del paciente y la data de contactos del paciente
+        # agregar a base de datos y mantener sesión iniciada
+        contacts = {
+            "rut": dicto["p_rut"][0],
+            "phones": dicto["phone"],
+            "mails": dicto["email"]
+        }
+        print(contacts)
+        contacts_by_rut.append(contacts)
+        return render_template("index.html")
+    return render_template("register.html")
+
+@main.route("/login")
+def login():
+    return render_template("login.html")
 
 @main.route("/test/")
 def test():
@@ -36,9 +58,14 @@ def showChartTest():
     # Return the components to the HTML template
     return render_template("chart-example.html", loc_data=loc_data, so_data=so_data, labels=labels)
 
-@main.route("/patientDashboard/<rut>")
-def showPatientDashboard(rut):
+@main.route("/patientDashboard")
+def patientDashboard():
+    return render_template("dashboard-by-rut.html")
+
+@main.route("/showPatientDashboard")
+def showPatientDashboard():
     from .mqtt_client import mqtt_msgs
+    rut = request.args["rut"]
     msgs_by_id = []
     results_by_id = []
     # personal data
@@ -172,8 +199,8 @@ def showPatientDashboard(rut):
                     num = num.replace("-", "")
                     health_advisor_data[0].append(res[1])
                     health_advisor_data[1].append(int(num))
-    print(patient_data, hr_data, spo2_data, max30102labels, ews_labels, t_data, sbp_data, rr_data, ews_results, loc_data, so_data, t_labels, sbp_labels, dbp_data, glucose_data)
-    print(health_status_labels, health_status_data, health_advisor_labels, health_advisor_data)
+    #print(patient_data, hr_data, spo2_data, max30102labels, ews_labels, t_data, sbp_data, rr_data, ews_results, loc_data, so_data, t_labels, sbp_labels, dbp_data, glucose_data)
+    #print(health_status_labels, health_status_data, health_advisor_labels, health_advisor_data)
 
     return render_template("patient-dashboard.html", patient_data = patient_data, hr_data=hr_data, spo2_data=spo2_data, max30102labels=max30102labels,
                            max30102results=max30102results, ews_labels=ews_labels, t_data=t_data, sbp_data=sbp_data, rr_data=rr_data, 
@@ -256,6 +283,7 @@ def create_HRSpO2():
             flash('Oxygen saturation is required!')    
         else:
             msg.append({'returnStatus': 0, 'type': "HR&SPO2", 'id': len(msg) + 1,'rut': rut, 'name': name, "hr": hr, "spo2": spo2})
+            print(msg)
             req_data = {
                 "topic": sendHRSpO2DataTopic,
                 "msg": f'DateTime=;rut={rut};hr={hr};spo2={spo2}'

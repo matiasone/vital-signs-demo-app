@@ -54,11 +54,11 @@ def handle_mqtt_publish(client, userdata, mid):
 
 @mqtt_client.on_message()
 def handle_mqtt_message(client, userdata, message):
-    from .routes import msg
+    from .routes import msg, contacts_by_rut
     data = dict(
        topic=message.topic,
        payload=message.payload.decode()
-        )
+    )
     print('Received message on topic: {topic} with payload: {payload}'.format(**data))
     print("MSG:", msg)
     now = datetime.now()
@@ -92,6 +92,7 @@ def handle_mqtt_message(client, userdata, message):
         print(mqtt_msgs)
         socketio_server.emit("mqtt_response_display", data=data)
     elif data["topic"] == receiveHRSpO2ResponseStatusTopic:
+        from .notifications import send_email_sms
         print("Recibimos el HR&SpO2 RESPONSE")
         print(data["payload"])
         data["id"] = len(msg)
@@ -99,12 +100,17 @@ def handle_mqtt_message(client, userdata, message):
         data["name"] = msg[len(msg)-1]["name"]
         data["datetime"] = date_time
         data["type"] = "HR&SPO2ResponseStatus"
+        data["input_hr"] = msg[len(msg)-1]["hr"]
+        data["input_spo2"] = msg[len(msg)-1]["spo2"]
         include = True
-        for i in mqtt_msgs:
-            if i["id"] == data["id"]:
+        for i in range(len(mqtt_msgs)):
+            if mqtt_msgs[i]["id"] == data["id"]:
+                mqtt_msgs[i] = data
                 include = False
         if include:
             mqtt_msgs.append(data)
+            input_ = [data["input_hr"], data["input_spo2"]]
+            send_email_sms(data["name"], data["rut"], data["payload"], input_, data["datetime"], "HR&SpO2", contacts_by_rut)
         print(mqtt_msgs)
         socketio_server.emit("mqtt_response_display", data=data)
     elif data["topic"] == receiveOxyDemandResponseStatusTopic:

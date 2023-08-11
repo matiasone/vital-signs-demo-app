@@ -17,9 +17,11 @@
         <label for="check" class="checkbtn">
             <i class="fas fa-bars"></i>
         </label>
-        <img class="logo-img" src="/static/images/vital-signs-demo-app-6.png" alt="your image" />
+        <img class="nav-logo-img" src="/static/images/vital-signs-demo-app-6.png" alt="your image"
+            style="height: 70px; width: auto;"/>
         <ul>
             <li><a class="active" href="{{ url_for('main.index') }}">FlaskApp</a></li>
+            <li><a href="{{ url_for('main.patientDashboard') }}">Patient Dashboard</a></li>
             <li><a href="{{ url_for('main.create_HRSpO2') }}">Send HR & SpO2 Data</a></li>
             <li><a href="{{ url_for('main.create_EWS') }}">Send EWS Data</a></li>
             <li><a href="{{ url_for('main.create_oxy_demand') }}">Send Oxygen Demand Data</a></li>

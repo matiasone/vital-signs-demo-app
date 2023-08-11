@@ -1,0 +1,67 @@
+{% extends 'base copy.html' %}
+{% block content %}
+    <h1 style="display: none">{% block title %} Register {% endblock %}</h1>
+    <div class="form-style-5">
+      <h1 for="job"> Register </h1>
+      <form method="post">
+      <fieldset>
+      <legend><span class="number">1</span> Personal Data</legend>
+      <input id = "NameTextArea" type="text" name="p_name" placeholder="Your name *"></input>
+      <input id = "EmailTextArea" type="email" name="p_email" placeholder="Your email *"></input>
+      <input id = "RutTextArea" type = "text" name="p_rut" placeholder="Your RUT *"></input>  
+      <input id = "Phone" type = "text" name="p_phone" placeholder="Your phone number"></input>
+      </fieldset>
+      <fieldset>
+      <legend><span class="number">2</span> Add close contact's data </legend>
+      <div id="contacts">
+        <input id="contacts_json" type="hidden" name="contacts_json">
+      </div>
+      </fieldset>
+      <input type="submit"/>
+      </form>
+      <div class="controls">
+        <button class="add" onclick="add()"><i class="fa fa-plus"></i>Add</button>
+        <button class="remove" onclick="remove()"><i class="fa fa-minus"></i>Remove</button>
+      </div>
+    </div>
+    <script>
+      var formfield = document.getElementById('contacts');
+      var data = []
+
+      function add(){
+        var newFieldName = document.createElement('input');
+        newFieldName.setAttribute('type','text');
+        newFieldName.setAttribute('name','name');
+        newFieldName.setAttribute('class', 'text');
+        newFieldName.setAttribute('placeholder',"Contact's name *")
+        formfield.appendChild(newFieldName);
+        var newFieldPhone = document.createElement('input');
+        newFieldPhone.setAttribute('type','text');
+        newFieldPhone.setAttribute('name','phone');
+        newFieldPhone.setAttribute('class', 'text');
+        newFieldPhone.setAttribute('placeholder',"Contact's phone number *");
+        formfield.appendChild(newFieldPhone);
+        var newFieldMail = document.createElement('input');
+        newFieldMail.setAttribute('type','email');
+        newFieldMail.setAttribute('name','email');
+        newFieldMail.setAttribute('class', 'text');
+        newFieldMail.setAttribute('placeholder',"Contact's email *");
+        data.push({"name": newFieldName, "email": newFieldMail, "phone": newFieldPhone});
+        var contacts_json = document.getElementById('contacts_json');
+        contacts_json.value = JSON.stringify(data);
+        formfield.appendChild(newFieldMail);
+        console.log(data);
+      }
+
+      function remove(){
+        var input_tags = formfield.getElementsByTagName('input');
+        if(input_tags.length > 3) {
+          formfield.removeChild(input_tags[(input_tags.length) - 1]);
+          formfield.removeChild(input_tags[(input_tags.length) - 2]);
+          formfield.removeChild(input_tags[(input_tags.length) - 3]);
+          data.pop();
+        }
+        console.log(data);
+      }
+    </script>
+{% endblock %}

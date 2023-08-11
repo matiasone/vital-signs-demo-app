@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 from .events import socketio_server
 from .routes import main
 from flask_mqtt import Mqtt
@@ -10,8 +11,10 @@ from flask_cors import CORS, cross_origin
 def create_app():
     app = Flask(__name__)
     CORS(app, supports_credentials=True)
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///mydb.db"
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    db = SQLAlchemy(app)
     app.config['SECRET_KEY'] = '9a6212f13d2370e87d273e56d418630f6e60ccc1748e1e06'
-
     app.config['MQTT_BROKER_URL'] = "broker.hivemq.com"
     app.config['MQTT_BROKER_PORT'] = 1883
     app.config["DEBUG"] = True

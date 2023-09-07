@@ -1,17 +1,20 @@
 {% extends 'base copy.html' %}
-
 {% block content %}
     <div class="index-style-4">
         <h1>{% block title %} Messages {% endblock %}</h1>
-        <label for="rut"><h2>Filter by RUT</h2></label>
-        <br>
-        <div id="container">
-            <form action="{{ url_for('main.viewDataByRut')}}" method="get">
-                <input id = "RutTextArea" name="rut"></input>
-                <input type="submit" id="filterButton" name="rut_button" value="Filter"></input>
-                <input type="submit" id="stopFilterButton" name="no_rut_button" value="Clear Filter"></input>
-            <form>
-        </div>
+        {% if session["loggedin"] %}
+            {% if session["isAdmin"] %}
+                <label for="rut"><h2>Filter by RUT</h2></label>
+                <br>
+                <div id="container">
+                    <form action="{{ url_for('main.viewDataByRut')}}" method="get">
+                        <input id = "RutTextArea" name="rut"></input>
+                        <input type="submit" id="filterButton" name="rut_button" value="Filter"></input>
+                        <input type="submit" id="stopFilterButton" name="no_rut_button" value="Clear Filter"></input>
+                    <form>
+                </div>
+            {% endif %}
+        {% endif %}
     </div>
     <script type="text/javascript" charset="utf-8">
         const socket = io({autoConnect: false})
@@ -50,7 +53,8 @@
             }
         })
     </script>
-    <div class="form-style-5">
+    <br>
+    <div class="form-style-5" id="noPaddingTop">
         {% for message in messages %}
             {% if message["type"] == "HR&SPO2" %}
                 <div class='message_hrspo2'>

@@ -20,27 +20,37 @@
         <img class="nav-logo-img" src="/static/images/vital-signs-demo-app-6.png" alt="your image"
             style="height: 70px; width: auto;"/>
         <a class="active" href="{{ url_for('main.index') }}">FlaskApp</a>
-        <a href="{{ url_for('main.patientDashboard') }}">Patient Dashboard</a>
-        <div class="dropdown">
-            <button class="dropbtn">Send data <i class="fa fa-caret-down"></i></button>
-            <div class="dropdown-content">
-                <a href="{{ url_for('main.create_HRSpO2') }}">Send HR & SpO2 Data</a></li>
-                <a href="{{ url_for('main.create_EWS') }}">Send EWS Data</a>
-                <a href="{{ url_for('main.create_oxy_demand') }}">Send Oxygen Demand Data</a>
-                <a href="{{ url_for('main.create_health_status') }}">Send Health Status Data</a>
-                <a href="{{ url_for('main.create_health_advisor') }}">Send Health Advisor Data</a>
+        {% if session['loggedin'] %}
+            <a href="{{ url_for('main.patientDashboard') }}">Patient Dashboard</a>
+            <div class="dropdown">
+                <button class="dropbtn">Send data <i class="fa fa-caret-down"></i></button>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('main.create_HRSpO2') }}">Send HR & SpO2 Data</a></li>
+                    <a href="{{ url_for('main.create_EWS') }}">Send EWS Data</a>
+                    <a href="{{ url_for('main.create_oxy_demand') }}">Send Oxygen Demand Data</a>
+                    <a href="{{ url_for('main.create_health_status') }}">Send Health Status Data</a>
+                    <a href="{{ url_for('main.create_health_advisor') }}">Send Health Advisor Data</a>
+                </div>
             </div>
-        </div>
-        <a href="{{ url_for('main.viewData') }}">Sent messages</a>
+            <a href="{{ url_for('main.viewData') }}">Sent messages</a>
+        {% endif %}
         <a href="{{ url_for('main.about') }}">About</a>
-        <a class="login" href="{{ url_for('main.about') }}">Login</a>
-        <a class="register" href="{{ url_for('main.register') }}">Register</a>
+        {% if session['loggedin'] %}
+            <a class="login2" href="{{ url_for('main.patientDashboard') }}">{{session['name']}}</a>
+            <a class="register" href="{{ url_for('main.logout') }}">Logout</a>
+        {% else %}
+            <style>
+                nav a.login {
+                    margin-left: 70%;
+                    background-color: #1b9bff
+                }
+            </style>
+            <a class="login" href="{{ url_for('main.login') }}">Login</a>
+            <a class="register" href="{{ url_for('main.register') }}">Register</a>
+        {% endif %}
     </nav>
     <section>
         <div class="content">
-            {% for message in get_flashed_messages() %}
-                <div class="alert">{{ message }}</div>
-            {% endfor %}
             {% block content %} {% endblock %}
         </div>
     </section>

@@ -6,8 +6,25 @@
     box-sizing: border-box;
 }
 
+.alert {
+    padding: 12px;
+    border-radius: 3px;
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: red;
+    background-color: rgba(251, 251, 89, 0.824);
+    color: black;
+}
+
 h1 {
     margin: 0;
+    padding-top: 0px;
+    padding-left: 5px;
+}
+#dashboard {
+    padding-left: 15px;
 }
 
 .content {
@@ -105,6 +122,10 @@ nav a {
 
 nav a.login {
     margin-left: 45%;
+    background-color: #1b9bff
+}
+nav a.login2 {
+    margin-left: 37%;
     background-color: #1b9bff
 }
 nav a.register {
@@ -291,8 +312,9 @@ section {
     max-width: 500px;
     padding: 10px 20px;
     background: #f4f7f8;
-    margin: 10px auto;
+    margin: 0px auto;
     padding: 20px;
+    padding-top: 100px;
     border-radius: 8px;
     font-family: Georgia, "Times New Roman", Times, serif;
 }
@@ -361,8 +383,9 @@ clear: both;
 max-width: 500px;
 padding: 10px 20px;
 background: #f4f7f8;
-margin: 10px auto;
+margin: 0px auto;
 padding: 20px;
+padding-top: 100px;
 border-radius: 8px;
 font-family: Georgia, "Times New Roman", Times, serif;
 }
@@ -385,6 +408,7 @@ font-family: Georgia, "Times New Roman", Times, serif;
 .form-style-5 input[type="search"],
 .form-style-5 input[type="time"],
 .form-style-5 input[type="url"],
+.form-style-5 input[type="password"],
 .form-style-5 button,
 .form-style-5 textarea,
 .form-style-5 select {
@@ -493,4 +517,8 @@ font-family: Georgia, "Times New Roman", Times, serif;
     border: 1px solid #02518e;
     -webkit-box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
     box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+}
+
+#noPaddingTop {
+    padding-top: 5px;
 }

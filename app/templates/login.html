@@ -1,60 +1,24 @@
 {% extends 'base copy.html' %}
 {% block content %}
-    <h1 style="display: none">{% block title %} Add an entry for Health Advisor Prediction {% endblock %}</h1>
+    <h1 style="display: none">{% block title %} Vital Signs Demo App{% endblock %}</h1>
     <div class="form-style-5">
-      <h1 for="job">Add an entry for Health Advisor Prediction</h1>
-      <button id="getDataButton">Get Max30102 Data</button>
+      <h1 for="job"> Login </h1>
       <form method="post">
       <fieldset>
-      <legend><span class="number">1</span> Personal Data</legend>
-      <input id = "NameTextArea" type="text" name="name" placeholder="Your name *"></input>
+      <legend><span class="number">*</span> Please enter user's email and password </legend>
       <input id = "EmailTextArea" type="email" name="email" placeholder="Your email *"></input>
-      <input id = "RutTextArea" type = "text" name="rut" placeholder="Your RUT *"></input>  
+      <input id = "PasswordTextArea" type = "password" name="password" placeholder="Your password *"></input>  
       </fieldset>
-      <fieldset>
-      <legend><span class="number">2</span> Vital Signs</legend>
-      <input id = "HRTextArea" type="text" name="hr" placeholder="Heart rate *"></input>
-      <input id = "SpO2TextArea" type="text" name="spo2" placeholder="Oxygen saturation *"></input>
-      <input id = "AgeTextArea" type="text" name="age" placeholder="Age *"></input>
-      <input id = "TemperatureTextArea" type="text" name="t" placeholder="Temperature *"></input>
-      <input id = "SBPTextArea" type="text" name="sbp" placeholder="Systolic blood pressure *"></input>
-      <input id = "DBPTextArea" type="text" name="dbp" placeholder="Diastolic blood pressure *"></input>
-      <input id = "GlucoseTextArea" type="text" name="glucose" placeholder="Glucose *"></input>
-      <label for="gender">Gender</label>
-      <select id = "GenderTextArea" name="gender">
-        <option value=0>Female</option>
-        <option value=1>Male</option>
-      </select>
-      </fieldset>
-      <input type="submit" value="Apply" />
+      <div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for msg in messages%}
+          <div class="alert">Error: {{ msg }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith%}
+      </div>
+      <input type="submit" value="Login" />
       </form>
     </div>
-    <button id="getDataButton">Get Max30102 Data</button>
-    <script type="text/javascript" charset="utf-8">
-        const socket = io({autoConnect: false})
-        document.getElementById("getDataButton").addEventListener("click", function() {
-    
-          socket.connect();
-    
-          socket.on("connect", function() {
-            socket.emit("get_esp32_data");
-            console.log("User waiting for data to display")
-          })
-          // listen for mqtt_message events
-          // when a new message is received, log and append the data to the page
-          socket.on('mqtt_message', function(data) {
-            console.log(data);
-            if (data["topic"] == "/Max30102FromESP32") {
-              var text = data['payload'];
-              var text = text.split(";")
-              console.log(data["payload"])
-              var hr_text = text[0].split("=")[1]
-              var spo2_text = text[1].split("=")[1]
-              console.log(hr_text, spo2_text)
-              document.getElementById("HRTextArea").value = hr_text;
-              document.getElementById("SpO2TextArea").value = spo2_text;
-            }
-          })
-        })
-      </script>
 {% endblock %}

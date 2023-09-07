@@ -7,15 +7,36 @@
     <form method="post">
     <fieldset>
     <legend><span class="number">1</span> Personal Data</legend>
-    <input id = "NameTextArea" type="text" name="name" placeholder="Your name *"></input>
-    <input id = "EmailTextArea" type="email" name="email" placeholder="Your email *"></input>
-    <input id = "RutTextArea" type = "text" name="rut" placeholder="Your RUT *"></input>
+    {% if session["loggedin"]%}
+        {% if session["isAdmin"] == False %}
+          <input id = "NameTextArea" type="text" name="name" placeholder="Your name *" value="{{session['name']}}" readonly></input>
+          <input id = "EmailTextArea" type="email" name="email" placeholder="Your email *" value="{{session['email']}}" readonly></input>
+          <input id = "RutTextArea" type = "text" name="rut" placeholder="Your RUT *" value="{{session['rut']}}" readonly></input>
+        {% else %}
+          <input id = "NameTextArea" type="text" name="name" placeholder="Your name *"></input>
+          <input id = "EmailTextArea" type="email" name="email" placeholder="Your email *"></input>
+          <input id = "RutTextArea" type = "text" name="rut" placeholder="Your RUT *"></input>
+        {% endif %}
+      {% else %}
+        <input id = "NameTextArea" type="text" name="name" placeholder="Your name *"></input>
+        <input id = "EmailTextArea" type="email" name="email" placeholder="Your email *"></input>
+        <input id = "RutTextArea" type = "text" name="rut" placeholder="Your RUT *"></input>
+      {% endif %}
     </fieldset>
     <fieldset>
     <legend><span class="number">2</span> Vital Signs</legend>
     <input id = "HRTextArea" type="text" name="hr" placeholder="Heart rate *"></input>
     <input id = "SpO2TextArea" type="text" name="spo2" placeholder="Oxygen saturation *"></input>
     </fieldset>
+    <div>
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      {% for msg in messages%}
+        <div class="alert">Error: {{ msg }}</div>
+      {% endfor %}
+      {% endif %}
+      {% endwith%}
+    </div>
     <input type="submit" value="Apply" />
     </form>
   </div>

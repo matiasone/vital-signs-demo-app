@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 from .events import socketio_server
 from .routes import main
 from flask_mqtt import Mqtt
@@ -13,7 +13,6 @@ def create_app():
     CORS(app, supports_credentials=True)
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///mydb.db"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    db = SQLAlchemy(app)
     app.config['SECRET_KEY'] = '9a6212f13d2370e87d273e56d418630f6e60ccc1748e1e06'
     app.config['MQTT_BROKER_URL'] = "broker.hivemq.com"
     app.config['MQTT_BROKER_PORT'] = 1883

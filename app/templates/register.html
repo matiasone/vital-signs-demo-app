@@ -9,8 +9,19 @@
       <input id = "NameTextArea" type="text" name="p_name" placeholder="Your name *"></input>
       <input id = "EmailTextArea" type="email" name="p_email" placeholder="Your email *"></input>
       <input id = "RutTextArea" type = "text" name="p_rut" placeholder="Your RUT *"></input>  
-      <input id = "Phone" type = "text" name="p_phone" placeholder="Your phone number"></input>
+      <input id = "Phone" type = "text" name="p_phone" placeholder="Your phone number *"></input>
+      <input id = "password" type = "password" name="p_password" placeholder="Your password *"></input>
+      <input id = "repeat_password" type = "password" name="p_r_password" placeholder="Repeat password *"></input>
       </fieldset>
+      <div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for msg in messages%}
+          <div class="alert">Error: {{ msg }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith%}
+      </div>
       <fieldset>
       <legend><span class="number">2</span> Add close contact's data </legend>
       <div id="contacts">

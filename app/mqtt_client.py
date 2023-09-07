@@ -64,7 +64,6 @@ def handle_mqtt_message(client, userdata, message):
     now = datetime.now()
     date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
     if data["topic"] == receiveDataTopic:
-        print("¡¡¡TENEMOS QUE PASARLE ESTA INFORMACIÓN IMPORTANTE AL USUARIO!!!")
         print(data["payload"])
         socketio_server.emit("mqtt_message", data=data)
         print("mensaje mqtt enviado por socketIO")
@@ -84,10 +83,8 @@ def handle_mqtt_message(client, userdata, message):
         include = True
         for i in mqtt_msgs:
             if i["id"] == data["id"]:
-                print("ESTA ENTRADA YA ESTÁ, NO DEBERÍAMOS DEJARLA PASAR MIERDA")
                 include = False
         if include:
-            print("La dejamos pasar jiji")
             mqtt_msgs.append(data)
         print(mqtt_msgs)
         socketio_server.emit("mqtt_response_display", data=data)
@@ -124,10 +121,8 @@ def handle_mqtt_message(client, userdata, message):
         include = True
         for i in mqtt_msgs:
             if i["id"] == data["id"]:
-                print("ESTA ENTRADA YA ESTÁ, NO DEBERÍAMOS DEJARLA PASAR MIERDA")
                 include = False
         if include:
-            print("La dejamos pasar jiji")
             mqtt_msgs.append(data)
         print(mqtt_msgs)
         socketio_server.emit("mqtt_response_display", data=data)
@@ -142,10 +137,8 @@ def handle_mqtt_message(client, userdata, message):
         include = True
         for i in mqtt_msgs:
             if i["id"] == data["id"]:
-                print("ESTA ENTRADA YA ESTÁ, NO DEBERÍAMOS DEJARLA PASAR MIERDA")
                 include = False
         if include:
-            print("La dejamos pasar jiji")
             mqtt_msgs.append(data)
         print(mqtt_msgs)
         socketio_server.emit("mqtt_response_display", data=data)
@@ -160,10 +153,8 @@ def handle_mqtt_message(client, userdata, message):
         include = True
         for i in mqtt_msgs:
             if i["id"] == data["id"]:
-                print("ESTA ENTRADA YA ESTÁ, NO DEBERÍAMOS DEJARLA PASAR MIERDA")
                 include = False
         if include:
-            print("La dejamos pasar jiji")
             mqtt_msgs.append(data)
         print(mqtt_msgs)
         socketio_server.emit("mqtt_response_display", data=data)

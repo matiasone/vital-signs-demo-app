@@ -3,7 +3,7 @@
 {% block content %}
     <div class="index-style-4">
         <h1>{% block title %} Patient's dashboard by rut{% endblock %}</h1>
-        <label for="rut"><h2>Enter patient's rut</h2></label>
+        <label for="rut"><h1>Enter patient's rut</h1></label>
         <br>
         <div id="container">
             <form action="{{ url_for('main.showPatientDashboard')}}" method="get">

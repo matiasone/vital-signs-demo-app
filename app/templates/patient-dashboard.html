@@ -1,10 +1,10 @@
 {% extends 'base copy.html' %}
 
 {% block content %}
-    <h1>{% block title %} Patient Dashboard: {{patient_data[1]}} - {{patient_data[0]}} {% endblock %}</h1>
+    <h1 id="dashboard">{% block title %} Patient Dashboard: {{patient_data[1]}} - {{patient_data[0]}} {% endblock %}</h1>
     <div class="row">
         <div class="column">
-            <div class="index-style-4">
+            <div class="index-style-4" id="noPaddingTop">
                 <div class="container">
                     <h1>HR and SpO2</h1>
                     <div style="height: 30vh; width: 90%;">
@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="column">
-            <div class="index-style-4">
+            <div class="index-style-4" id="noPaddingTop">
                 <div class="container">
                     <h1>Early Warning Score</h1>
                     <div style="height: 20vh; width: 90%;">
@@ -47,14 +47,22 @@
             </div>
         </div>
         <div class="column">
-            <div class="index-style-4">
+            <div class="index-style-4" id="noPaddingTop">
                 <div class="container">
                     <h1>Patient personal data:</h1>
+                    {% if session["loggedin"] %}
+                    <h3>Name: {{session["name"]}}</h1>
+                    <h3>Rut: {{session["rut"]}}</h3>
+                    <h3>Age: {{patient_data[2]}}</h3>
+                    <h3>Gender: {{patient_data[3]}}</h3>
+                    <h3>Had Covid: {{patient_data[4]}}</h3>
+                    {% else %}
                     <h3>Name: {{patient_data[1]}}</h1>
                     <h3>Rut: {{patient_data[0]}}</h3>
                     <h3>Age: {{patient_data[2]}}</h3>
                     <h3>Gender: {{patient_data[3]}}</h3>
                     <h3>Had Covid: {{patient_data[4]}}</h3>
+                    {% endif %}
                     <br>
                     <h1>Health Advisor</h1>
                     <div style="height: 30vh; width: 90%;">
